@@ -1,0 +1,31 @@
+services:
+  db:
+    image: postgres:15
+    container_name: workflow-db
+    environment:
+      POSTGRES_DB: workflow
+      POSTGRES_USER: fazliddin
+      POSTGRES_PASSWORD: 1
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  app:
+    image: workflow-app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: workflow-app
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/workflow
+      SPRING_DATASOURCE_USERNAME: fazliddin
+      SPRING_DATASOURCE_PASSWORD: 1
+      SPRING_JPA_HIBERNATE_DDL_AUTO Notification come: update
+    depends_on:
+      - db
+
+volumes:
+  postgres_data:
