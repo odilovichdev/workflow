@@ -33,7 +33,7 @@ public class Security {
         http
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers(SWAGGER_URLS).permitAll()
-                        .requestMatchers("/api/auth/signup",
+                        .requestMatchers("/api/auth/signup","/**",
                                 "/api/auth/login","/api/task/assignTo-emp").permitAll()
                         .requestMatchers("/api/emp/invite",
                                 "/api/emp/get-all",
