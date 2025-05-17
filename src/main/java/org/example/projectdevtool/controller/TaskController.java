@@ -1,5 +1,7 @@
 package org.example.projectdevtool.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.AllArgsConstructor;
 import org.example.projectdevtool.dto.AssignTaskToEmployeeDto;
 import org.example.projectdevtool.dto.RateTaskDto;
@@ -25,21 +27,11 @@ public class TaskController {
     @PostMapping("/create")
     public ResponseEntity<Task> createTask(@RequestBody TaskRequestDto dto) {
         Task task = taskService.createTask(dto);
-//        TaskResponse response = new TaskResponse(
-//                task.getId(),
-//                task.getName(),
-//                task.getDescription(),
-//                task.getProject().getName(),
-//                task.getAssignedTo().getUser().getEmail(),
-//                task.getStatus(),
-//                task.getPrior().toString(),
-//                task.getProject().getOwner().getId(),
-//                task.getScore()
-//        );
         return ResponseEntity.ok(task);
     }
 
     @PostMapping("/assignTo-emp")
+    @Operation(summary = "assign a task to a specific user(employee)")
     public ResponseEntity<TaskResponse> assignTaskToEmployee(@RequestBody AssignTaskToEmployeeDto dto) {
         TaskResponse response = taskService.assignTask(dto);
 //        simpMessagingTemplate.convertAndSend("/task/message", response);
@@ -47,12 +39,21 @@ public class TaskController {
     }
 
     @GetMapping("/listBy-proId/{projectId}/{employeeId}")
+    @Operation(summary = "get list of tasks",
+                description = "give project and employee Id in path, it returns list of task in specific user"
+    )
     public ResponseEntity<List<TaskResponse>> getTasksByProjectId(@PathVariable("projectId") Long projectId,
                                                                   @PathVariable("employeeId") Long employeeId) {
         return ResponseEntity.ok(taskService.getTasksByProjectId(projectId, employeeId));
     }
 
     @PatchMapping("/update-status")
+    @Operation(summary = "update a task status",
+                parameters = {
+                    @Parameter(name = "id", description = "task Id", required = true),
+                    @Parameter(name = "status", required = true)
+                }
+    )
     public ResponseEntity<TaskResponse> updateStatusTask(@RequestParam("id") Long id,
                                               @RequestParam("status") String status) {
         TaskResponse task = taskService.updateStatusTask(id, status);
@@ -62,6 +63,9 @@ public class TaskController {
     }
 
     @GetMapping("/getAll/{projectId}") //
+    @Operation(summary = "get all task of a project",
+                description = "give projectId in path, it returns a list of tasks in a project"
+    )
     public ResponseEntity<List<TaskResponse>> getAll(@PathVariable("projectId") Long projectId) {
 //        return ResponseEntity.ok(taskService.getAll(projectId));
         return ResponseEntity.ok(taskService.findAll(projectId));

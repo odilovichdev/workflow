@@ -12,19 +12,17 @@ import org.example.projectdevtool.entity.Users;
 import org.example.projectdevtool.repo.ProfileRepo;
 import org.example.projectdevtool.repo.ProjectRepo;
 import org.example.projectdevtool.repo.UsersRepo;
-import org.springframework.dao.PermissionDeniedDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
 @AllArgsConstructor
 public class ProjectService {
-
+    //    private final ProjectRepoWithReactor reactor;
     private final ProjectRepo projectRepo;
     private final ProfileRepo profileRepo;
     private final EmailService emailService;
@@ -34,14 +32,14 @@ public class ProjectService {
         Project project = new Project();
 
         Users user = usersRepo.findById(dto.getOwnerId())
-                        .orElseThrow(()->new NoSuchElementException("not found"));
+                .orElseThrow(() -> new NoSuchElementException("not found"));
 
         if (!(user.getRole().toString().equals("PM") || user.getRole().toString().equals("DIRECTOR"))) {
             throw new RuntimeException("Permission denied");
         }
 
         Profile profile = profileRepo.findById(dto.getOwnerId())
-                        .orElseThrow(()->new NoSuchElementException("not found"));
+                .orElseThrow(() -> new NoSuchElementException("not found"));
 
         project.setName(dto.getName());
         project.setDescription(dto.getDescription());
@@ -155,10 +153,13 @@ public class ProjectService {
         return projectRepo.findByStartDateOrEndDate(LocalDate.now(), LocalDate.now());
     }
 
-    public Project findById(Long id) {
-        return projectRepo.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("not found"));
-    }
+//    public Mono<ResponseEntity<Project>> findById(Long id) {
+//        return Mono.just(id)
+//                .flatMap(reactor::findById)
+//                .map(ResponseEntity::ok)
+////
+//                .onErrorMap(e->{throw new NoSuchElementException("not fount");});
+//    }
 
     public List<Project> findByEmployeeId(Long id) {
         Users user = usersRepo.findById(id)
@@ -191,7 +192,7 @@ public class ProjectService {
 
         List<ProjectResponse> responses = new ArrayList<>();
 
-        for(Project project: projects){
+        for (Project project : projects) {
             ProjectResponse response = new ProjectResponse();
             response.setId(project.getId());
             response.setProjectName(project.getName());
@@ -201,5 +202,10 @@ public class ProjectService {
         }
 
         return responses;
+    }
+
+    public Project findById(Long id) {
+        return projectRepo.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("project not found"));
     }
 }

@@ -234,7 +234,7 @@ public class TaskService {
                 .anyMatch(profile -> profile.getUser().getId().equals(userId));
 
         if (!isEmployee) {
-            throw new IllegalStateException("User is not part of the project");
+            throw new RuntimeException("User is not part of the project");
         }
 
         List<Task> tasks = taskRepo.findByProject(project);

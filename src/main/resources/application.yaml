@@ -1,0 +1,8 @@
+#spring:
+#  r2dbc:
+#    url: r2dbc:postgresql://localhost:5432/prodevtool
+#    username: postgres
+#    password: 08062002
+#  sql:
+#    init:
+#      mode: always

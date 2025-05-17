@@ -27,6 +27,10 @@ dependencies {
 
 //    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-thymeleaf', version: '3.3.0'
 //    implementation group: 'net.sourceforge.nekohtml', name: 'nekohtml', version: '1.9.22'
+//    implementation 'org.springframework.boot:spring-boot-starter-data-r2dbc'
+//    implementation 'io.r2dbc:r2dbc-postgresql:0.8.13.RELEASE'
+//    implementation 'io.projectreactor:reactor-core:3.5.10'
+//    implementation 'org.springframework.boot:spring-boot-starter-webflux'
     implementation 'org.webjars:webjars-locator-core'
     implementation 'com.itextpdf:itext7-core:7.2.5' // Use the latest version
     implementation 'org.webjars:sockjs-client:1.0.2'

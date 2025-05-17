@@ -16,8 +16,8 @@ import io.swagger.v3.oas.annotations.servers.Server;
                         name = "Islom",
                         email = "turgunpolatovislom5@gmail.com"
                 ),
-                description = "OpenApi documentation for InLink project",
-                title = "OpenApi specification",
+                description = "OpenApi documentation for Workflow project",
+                title = "Workflow API specification",
                 version = "1.0",
                 license = @License(
                         name = "License name",
@@ -26,10 +26,8 @@ import io.swagger.v3.oas.annotations.servers.Server;
                 termsOfService = "Terms of service"
         ),
         servers = @Server(
-                description = "Local En",
-                url = "http://localhost:9091"
+                description = "Local En"
         )
-        //security =
 )
 @SecurityScheme(
         name = "bearerAuth",

@@ -1,5 +1,6 @@
 package org.example.projectdevtool.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -23,9 +24,11 @@ public class Task implements Serializable {
     private String description;
 
     @Column
+    @JsonFormat(pattern = "dd-MM-yyyy")
     private LocalDate startDate;
 
     @Column
+    @JsonFormat(pattern = "dd-MM-yyyy")
     private LocalDate endDate;
 
     @ManyToOne(fetch = FetchType.EAGER)

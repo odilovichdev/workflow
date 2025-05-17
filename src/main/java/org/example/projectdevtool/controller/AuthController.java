@@ -2,6 +2,7 @@ package org.example.projectdevtool.controller;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.example.projectdevtool.dto.LoginRequest;
 import org.example.projectdevtool.dto.RegisterRequest;
 import org.example.projectdevtool.entity.Users;
@@ -28,12 +29,12 @@ public class AuthController {
 
 
     @PostMapping("/signup")
-    public ResponseEntity<?> register(@RequestBody RegisterRequest request){
+    public ResponseEntity<Users> register(@RequestBody RegisterRequest request){
         return ResponseEntity.ok(userService.register(request));
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest request){
+    public ResponseEntity<Token> login(@RequestBody LoginRequest request){
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getLogin(), request.getPassword())
@@ -45,11 +46,10 @@ public class AuthController {
     }
 
     @Data
-    static class Token{
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class Token{
         private String accessToken;
         private boolean haveProfile;
-        public Token(String accessToken, boolean haveProfile) {
-            this.accessToken = accessToken; this.haveProfile = haveProfile;
-        }
     }
 }

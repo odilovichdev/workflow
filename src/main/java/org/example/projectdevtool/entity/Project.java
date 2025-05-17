@@ -1,5 +1,6 @@
 package org.example.projectdevtool.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -25,9 +26,11 @@ public class Project implements Serializable {
     private double budget;
 
     @Column
+    @JsonFormat(pattern = "dd-MM-yyyy")
     private LocalDate startDate;
 
     @Column
+    @JsonFormat(pattern = "dd-MM-yyyy")
     private LocalDate endDate; //deadline
 
     @ManyToOne

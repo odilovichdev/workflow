@@ -37,7 +37,7 @@ public class UserService {
         user.setEmail(request.getEmail());
         user.setLogin(request.getLogin());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setRole(Users.Role.EMPLOYEE);
+        user.setRole(request.getRole());
         user.setCreatedAt(LocalDateTime.now());
         return usersRepo.save(user);
     }

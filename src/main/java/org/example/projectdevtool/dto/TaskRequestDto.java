@@ -1,5 +1,6 @@
 package org.example.projectdevtool.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.example.projectdevtool.entity.Profile;
@@ -13,7 +14,9 @@ import java.time.LocalDate;
 public class TaskRequestDto {
     private String name;
     private String description;
+    @JsonFormat(pattern = "dd-MM-yyyy")
     private LocalDate startDate;
+    @JsonFormat(pattern = "dd-MM-yyyy")
     private LocalDate endDate;
     private Long projectId;
     private int score;

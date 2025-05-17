@@ -1,8 +1,15 @@
 package org.example.projectdevtool.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import org.example.projectdevtool.dto.EmployeeToProject;
 import org.example.projectdevtool.dto.ProjectRequestDto;
+import org.example.projectdevtool.dto.ProjectResponse;
+import org.example.projectdevtool.entity.Profile;
 import org.example.projectdevtool.entity.Project;
 import org.example.projectdevtool.service.ProjectService;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +17,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
+
+import static java.lang.String.CASE_INSENSITIVE_ORDER;
 
 @RestController
 @RequestMapping("/api/pro")
@@ -19,6 +28,15 @@ public class ProjectController {
     private final ProjectService projectService;
 
     @PostMapping("/create")
+    @Operation(summary = "create a project",
+                    description = "only DIRECTOR AND PM role can do",
+                    requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                            required = true,
+                            content = @Content(
+                                    schema = @Schema(implementation = ProjectRequestDto.class)
+                            )
+                    )
+    )
     public ResponseEntity<?> createProject(@RequestBody ProjectRequestDto dto) {
         return ResponseEntity.ok(projectService.createProject(dto));
     }
@@ -34,8 +52,13 @@ public class ProjectController {
     }
 
     @PatchMapping("/update-status")
-    public ResponseEntity<?> updateProjectStatus(@RequestParam("id") Long id,
-                                                 @RequestParam("status") String status) {
+    @Operation(summary = "update status of a project",
+                parameters = {
+                        @Parameter(name = "id", description = "project Id", required = true),
+                        @Parameter(name = "status", description = "String value", required = true)
+                })
+    public ResponseEntity<Project> updateProjectStatus(@RequestParam("id") Long id,
+                                                       @RequestParam("status") String status) {
         return ResponseEntity.ok(projectService.updateStatus(id, status));
     }
 
@@ -47,29 +70,42 @@ public class ProjectController {
     }
 
     @GetMapping("/list-today")
-    public ResponseEntity<?> listOfTodayProjects() {
+    public ResponseEntity<List<Project>> listOfTodayProjects() {
         return ResponseEntity.ok(projectService.getOfToday());
     }
 
     @GetMapping("/getById/{id}")
-    public ResponseEntity<?> getById(@PathVariable("id") Long id) {
+    @Operation(summary = "get a project with Id in path")
+    public ResponseEntity<Project> getById(@PathVariable("id") Long id) {
         return ResponseEntity.ok(projectService.findById(id));
     }
+//    @GetMapping("/getById/{id}")
+//    public Mono<ResponseEntity<Project>> getById(@PathVariable("id") Long id) {
+//        return projectService.findById(id);
+//    }
 
     @GetMapping("/findBy/empId/{id}")
-    public ResponseEntity<?> findByEmployeeList(@PathVariable("id") Long id) {
+    @Operation(summary = "find all projects which the user is in")
+    public ResponseEntity<List<Project>> findByEmployeeList(@PathVariable("id") Long id) {
         return ResponseEntity.ok(projectService.findByEmployeeId(id));
     }
 
     @GetMapping("/emp-list/{projectId}/{ownerId}")
-    public ResponseEntity<?> getEmployeeList(@PathVariable("projectId") Long projectId,
-                                             @PathVariable("ownerId") Long ownerId){
-            return ResponseEntity.ok(projectService.getEmployeeList(projectId, ownerId));
+    @Operation(summary = "Get a list of employees in a project",
+            description = "Returns a list of employees assigned to a specific project and owner",
+            parameters = {
+                    @Parameter(name = "projectId", description = "ID of the project", required = true, example = "1"),
+                    @Parameter(name = "ownerId", description = "ID of the owner", required = true, example = "10")
+            })
+    public ResponseEntity<List<Profile>> getEmployeeList(@PathVariable("projectId") Long projectId,
+                                                         @PathVariable("ownerId") Long ownerId) {
+        return ResponseEntity.ok(projectService.getEmployeeList(projectId, ownerId));
     }
 
 
     @GetMapping("/all")
-    public ResponseEntity<?> findAll(){
+    @Operation(summary = "get all projects with limited fields")
+    public ResponseEntity<List<ProjectResponse>> findAll() {
         return ResponseEntity.ok(projectService.findAll());
     }
 
