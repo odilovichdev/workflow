@@ -274,4 +274,7 @@ public class TaskService {
                 .collect(Collectors.toList());
     }
 
+    public List<Task> getAll() {
+        return taskRepo.findAll();
+    }
 }

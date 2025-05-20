@@ -35,37 +35,37 @@ public class Security {
                         .requestMatchers(SWAGGER_URLS).permitAll()
                         .requestMatchers("/api/auth/signup","/**",
                                 "/api/auth/login","/api/task/assignTo-emp").permitAll()
-                        .requestMatchers("/api/emp/invite",
-                                "/api/emp/get-all",
-                                "/api/doc/upload/**",
-                                "/api/doc/view/**",
-                                "/api/board/get/**",
-                                "/api/pro/add-emp",
-                                "/api/emp/findBy/**",
-                                "/api/pro/get-list",
-                                "/api/pro/update-status",
-                                "/api/pro/delay/**",
-                                "api/pro/list-today",
-                                "/api/emp/findById/**",
-                                "/api/task/create",
-                                "/api/pro/emp-list/**",
-                                "/api/pro/getById/**",
-                                "/api/task/rate/**",
-                                "/api/emp/fill-profile",
-                                "/api/task/getAll/**",
-                                "/api/task/moveToBacklog/**").permitAll() // dr, pm
-                        .requestMatchers(
-                                "/api/pro/findBy/empId/**"
-                                ).hasAnyRole("EMPLOYEE","PM","DIRECTOR")// employee
-                        .requestMatchers("/api/task/update-status",
-                                "/api/emp/get-profile",
-                                "/**",
-                                "/api/task/listBy-proId/**",
-                                "/api/comment/add",
-                                "/api/report/download/**",
-                                "/api/report/get/**",
-                                "/api/pro/all").permitAll() // dr, pm, em
-                        .requestMatchers("/api/pro/create").hasAnyRole("DIRECTOR", "PM")
+//                        .requestMatchers("/api/emp/invite",
+//                                "/api/emp/get-all",
+//                                "/api/doc/upload/**",
+//                                "/api/doc/view/**",
+//                                "/api/board/get/**",
+//                                "/api/pro/add-emp",
+//                                "/api/emp/findBy/**",
+//                                "/api/pro/get-list",
+//                                "/api/pro/update-status",
+//                                "/api/pro/delay/**",
+//                                "api/pro/list-today",
+//                                "/api/emp/findById/**",
+//                                "/api/task/create",
+//                                "/api/pro/emp-list/**",
+//                                "/api/pro/getById/**",
+//                                "/api/task/rate/**",
+//                                "/api/emp/fill-profile",
+//                                "/api/task/getAll/**",
+//                                "/api/task/moveToBacklog/**").permitAll() // dr, pm
+//                        .requestMatchers(
+//                                "/api/pro/findBy/empId/**"
+//                                ).hasAnyRole("EMPLOYEE","PM","DIRECTOR")// employee
+//                        .requestMatchers("/api/task/update-status",
+//                                "/api/emp/get-profile",
+//                                "/**",
+//                                "/api/task/listBy-proId/**",
+//                                "/api/comment/add",
+//                                "/api/report/download/**",
+//                                "/api/report/get/**",
+//                                "/api/pro/all").permitAll() // dr, pm, em
+//                        .requestMatchers("/api/pro/create").hasAnyRole("DIRECTOR", "PM")
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class)

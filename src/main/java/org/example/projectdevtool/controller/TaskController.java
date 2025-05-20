@@ -87,4 +87,9 @@ public class TaskController {
         simpMessagingTemplate.convertAndSend("/task/message", response);
         return ResponseEntity.ok(response);
     }
+
+    @PostMapping("/all")
+    public ResponseEntity<List<Task>> findAll(){
+        return ResponseEntity.ok(taskService.getAll());
+    }
 }

@@ -2,13 +2,13 @@ package org.example.projectdevtool.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import org.example.projectdevtool.dto.EmployeeToProject;
 import org.example.projectdevtool.dto.ProjectRequestDto;
 import org.example.projectdevtool.dto.ProjectResponse;
+import org.example.projectdevtool.dto.UpdateRequest;
 import org.example.projectdevtool.entity.Profile;
 import org.example.projectdevtool.entity.Project;
 import org.example.projectdevtool.service.ProjectService;
@@ -17,8 +17,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
-
-import static java.lang.String.CASE_INSENSITIVE_ORDER;
 
 @RestController
 @RequestMapping("/api/pro")
@@ -29,13 +27,13 @@ public class ProjectController {
 
     @PostMapping("/create")
     @Operation(summary = "create a project",
-                    description = "only DIRECTOR AND PM role can do",
-                    requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                            required = true,
-                            content = @Content(
-                                    schema = @Schema(implementation = ProjectRequestDto.class)
-                            )
+            description = "only DIRECTOR AND PM role can do",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    required = true,
+                    content = @Content(
+                            schema = @Schema(implementation = ProjectRequestDto.class)
                     )
+            )
     )
     public ResponseEntity<?> createProject(@RequestBody ProjectRequestDto dto) {
         return ResponseEntity.ok(projectService.createProject(dto));
@@ -53,13 +51,12 @@ public class ProjectController {
 
     @PatchMapping("/update-status")
     @Operation(summary = "update status of a project",
-                parameters = {
-                        @Parameter(name = "id", description = "project Id", required = true),
-                        @Parameter(name = "status", description = "String value", required = true)
-                })
-    public ResponseEntity<Project> updateProjectStatus(@RequestParam("id") Long id,
-                                                       @RequestParam("status") String status) {
-        return ResponseEntity.ok(projectService.updateStatus(id, status));
+            parameters = {
+                    @Parameter(name = "id", description = "project Id", required = true),
+                    @Parameter(name = "status", description = "String value", required = true)
+            })
+    public ResponseEntity<Project> updateProjectStatus(@RequestBody UpdateRequest request) {
+        return ResponseEntity.ok(projectService.updateStatus(request));
     }
 
     @PatchMapping("/delay/{id}")

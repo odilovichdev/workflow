@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import org.example.projectdevtool.dto.EmployeeToProject;
 import org.example.projectdevtool.dto.ProjectRequestDto;
 import org.example.projectdevtool.dto.ProjectResponse;
+import org.example.projectdevtool.dto.UpdateRequest;
 import org.example.projectdevtool.entity.Profile;
 import org.example.projectdevtool.entity.Project;
 import org.example.projectdevtool.entity.Status;
@@ -38,8 +39,7 @@ public class ProjectService {
             throw new RuntimeException("Permission denied");
         }
 
-        Profile profile = profileRepo.findById(dto.getOwnerId())
-                .orElseThrow(() -> new NoSuchElementException("not found"));
+        Profile profile = profileRepo.findByUser(user);
 
         project.setName(dto.getName());
         project.setDescription(dto.getDescription());
@@ -91,7 +91,7 @@ public class ProjectService {
                 .map(Users::getEmail)
                 .toList();
 
-        emailService.sendNotification(emails, project.getName());
+//        emailService.sendNotification(emails, project.getName());
 //        setProjectToEmployeesProfile(owner, employees, project); // once employees have been added to the project, the project will be set into these employees`s profile
         return projectRepo.save(project);
     }
@@ -112,21 +112,20 @@ public class ProjectService {
     }
 
     @Transactional
-
-    public Project updateStatus(Long id, String status) {
-        Project project = projectRepo.findById(id)
+    public Project updateStatus(UpdateRequest request) {
+        Project project = projectRepo.findById(request.projectId())
                 .orElseThrow(() -> new NoSuchElementException("not found"));
 
-        switch (status) {
+        switch (request.status()) {
             case "START" -> {
                 project.setStatus(Status.IN_PROGRESS);
-                List<String> emails = project.getEmployees().stream()
-                        .map(Profile::getUser)
-                        .map(Users::getEmail)
-                        .toList();
-                emailService.sendEmailInvitation(emails,
-                        "project " + project.getName() + " started",
-                        "project " + project.getName() + " has been started so please check out your account!");
+//                List<String> emails = project.getEmployees().stream()
+//                        .map(Profile::getUser)
+//                        .map(Users::getEmail)
+//                        .toList();
+//                emailService.sendEmailInvitation(emails,
+//                        "project " + project.getName() + " started",
+//                        "project " + project.getName() + " has been started so please check out your account!");
             }
             case "CANCELLED" -> project.setStatus(Status.CANCELLED);
             case "FINISH" -> project.setStatus(Status.COMPLETED);
